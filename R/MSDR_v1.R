@@ -1,6 +1,7 @@
 require(tidyverse)
 require(lubridate)
 require(stringr)
+require(leaflet)
 
 # After downloading and reading in the dataset, the overall task for this module is to write a function
 # named eq_clean_data()that takes raw NOAA data frame and returns a clean data frame.
@@ -9,31 +10,40 @@ require(stringr)
 #  - A date column created by uniting the year, month, day and converting it to the Date class
 #  - LATITUDE and LONGITUDE columns converted to numeric class
 
-eq_clean_data <- function(raw_data){
-  raw_data <- raw_data %>%
+eq_clean_data <- function(data){
+  data <- data %>%
     dplyr::mutate(
+      EQ_PRIMARY =  as.numeric(EQ_PRIMARY),
+      LATITUDE =  as.numeric(LATITUDE),
+      LONGITUDE= as.numeric(LONGITUDE),
       YEAR = as.numeric(YEAR),
       MONTH = ifelse(is.na(MONTH) == TRUE, 01,MONTH),
       DAY = ifelse(is.na(DAY) == TRUE, 01,DAY),
-      date = if_else(raw_data$YEAR > 0,
+      DATE = if_else(data$YEAR > 0,
                      as.Date(ISOdate(abs(YEAR),MONTH,DAY)),
                      as.Date(as.numeric(ISOdate(0,1,1)-ISOdate(abs(YEAR),MONTH,DAY)), origin = '0000-01-01'))
     )
-  return(raw_data)
+
+  data <- eq_location_clean(data)
+
+  return(data)
 }
 
 #  - In addition, write a function eq_location_clean() that cleans the LOCATION_NAME column by stripping out
 #    the country name (including the colon) and converts names to title case (as opposed to all caps).
 #    This will be needed later for annotating visualizations. This function should be applied to the raw data to produce a
 #    cleaned up version of the LOCATION_NAME column.
-eq_location_clean <- function(raw_data){
-  raw_data$LOCATION_NAME <- raw_data$LOCATION_NAME %>% stringr::str_extract('(?<=:\\s).*') %>% stringr::str_to_title()
-  return(raw_data)
+eq_location_clean <- function(data){
+  data$LOCATION_NAME <- data$LOCATION_NAME %>% stringr::str_extract("(?![A-Z]*:).+") %>%
+                                  stringr::str_trim("left") %>%
+                                  stringr::str_to_title()
+
+  data
 }
 
 # test-zone
 raw_data <- readr::read_tsv('results')
-data <- eq_clean_data(raw_data)
+data <- eq_location_clean(data)
 
 # Build a geom for ggplot2 called geom_timeline() for plotting a time line of earthquakes ranging from xmin to
 # xmaxdates with a point for each earthquake. Optional aesthetics include color, size, and alpha (for transparency).
@@ -117,7 +127,7 @@ geomtimeline_label <- ggplot2::ggproto("Geomtimeline_label", Geom,
 
                                    nmax <- data$n_max[1]
                                    data <- data %>%dplyr::group_by(group)%>%dplyr::top_n(nmax,size)%>%dplyr::ungroup()
-                                   str(data)
+                                   # str(data)
                                    coords <- coord$transform(data, panel_scales)
 
                                    # coords <- coords%>%group_by(id)%>%top_n(n_max[1],size)%>%ungroup()
@@ -166,5 +176,57 @@ data %>%
   eq_location_clean()%>%
   ggplot(aes(x = date, y = COUNTRY, fill = TOTAL_DEATHS, size = EQ_PRIMARY, label = LOCATION_NAME))+
   geom_timeline()+
-  geom_timeline_label()+
+  geom_timeline_label(aes(n_max = 3))+
   theme_bw()
+
+
+# Build a function called eq_map() that takes an argument data containing the filtered data frame with earthquakes to visualize.
+# The function maps the epicenters (LATITUDE/LONGITUDE) and annotates each point with in pop up window containing annotation data
+# stored in a column of the data frame. The user should be able to choose which column is used for the annotation in the pop-up with
+# a function argument named annot_col. Each earthquake should be shown with a circle, and the radius of the circle should be proportional
+# to the earthquake's magnitude (EQ_PRIMARY). Your code, assuming you have the earthquake data saved in your working
+# directory as "earthquakes.tsv.gz", should be able to be used in the following way:
+
+eq_map <- function(data, annot_col = NULL){
+    data%>%
+    leaflet::leaflet() %>%
+    leaflet::addTiles() %>%
+    leaflet::addCircleMarkers(lng =~LONGITUDE, lat =~LATITUDE,
+                              radius =~EQ_PRIMARY,
+                              weight = 2,
+                              color = "red",
+                              popup =data[[annot_col]])
+
+}
+
+
+readr::read_delim("earthquakes.tsv.gz", delim = "\t") %>%
+  eq_clean_data() %>%
+  dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(DATE) >= 2000) %>%
+  eq_map(annot_col = "DATE")
+
+
+# Finally, it would be useful to have more interesting pop-ups for the interactive map created with the eq_map() function. Create a
+# function called eq_create_label() that takes the dataset as an argument and creates an HTML label that can be used as the annotation
+# text in the leaflet map. This function should put together a character string for each earthquake that will show the cleaned location
+# (as cleaned by the eq_location_clean() function created in Module 1), the magnitude (EQ_PRIMARY), and the total number
+# of deaths (TOTAL_DEATHS), with boldface labels for each ("Location", "Total deaths", and "Magnitude"). If an earthquake is missing values
+# for any of these, both the label and the value should be skipped for that element of the tag. Your code should be able to be used in the
+# following way:
+
+
+eq_create_label <- function(data) {
+  loc <- ifelse(is.na(data$LOCATION_NAME),"",paste("<strong>Location:</strong>",data$LOCATION_NAME))
+  eq <- ifelse(is.na(data$EQ_PRIMARY),"",paste("<br><strong>Magnitude:</strong>",data$EQ_PRIMARY))
+  death <- ifelse(is.na(data$TOTAL_DEATHS),"",paste("<br><strong>Total deaths:</strong>",data$TOTAL_DEATHS))
+  paste0(loc,eq,death)
+}
+
+
+
+readr::read_delim("earthquakes.tsv.gz", delim = "\t") %>%
+  eq_clean_data() %>%
+  dplyr::filter(COUNTRY == "ITALY" & lubridate::year(DATE) >= 2000) %>%
+  dplyr::mutate(popup_text = eq_create_label(.)) %>%
+  eq_map(annot_col = "popup_text")
+
