@@ -1,3 +1,4 @@
+#' eq_clean_data
 #'@name eq_clean_data
 #'
 #'@description Clean up the format of certain columns in a NOAA dataframe
@@ -41,7 +42,7 @@ eq_clean_data <- function(data){
   return(data)
 }
 
-
+#'eq_location_clean
 #'@name eq_location_clean
 #'
 #'@description Clean up the format of LOCATION_NAME column in a NOAA dataframe (see \code{\link{eq_clean_data}} for more details)
@@ -71,6 +72,7 @@ eq_location_clean <- function(data){
   data
 }
 
+#'geom_timeline
 #'@name geom_timeline
 #'
 #'@description Creates a timeline chart specific for a NOAA dataframe (see \code{\link{eq_clean_data}} for more details)
@@ -109,6 +111,7 @@ geom_timeline <- function(
   )
 }
 
+#'geomtimeline
 #'@name geomtimeline
 #'
 #'@description Creates the grob for \code{\link{geom_timeline}}
@@ -164,6 +167,7 @@ geomtimeline <- ggplot2::ggproto("Geomtimeline", ggplot2::Geom,
                           )
 
 
+#'geom_timeline_label
 #'@name geom_timeline_label
 #'
 #'@description Creates additional notation for the timeline chart (see \code{\link{geom_timeline}} for more details)
@@ -206,7 +210,7 @@ geom_timeline_label <- function(
     params = list(na.rm = na.rm, ...)
   )
 }
-
+#'geomtimeline_label
 #'@name geomtimeline_label
 #'
 #'@description Creates the grob for \code{\link{geom_timeline_label}}
@@ -255,7 +259,7 @@ geomtimeline_label <- ggplot2::ggproto("Geomtimeline_label", ggplot2::Geom,
 
 )
 
-
+#'eq_map
 #'@name eq_map
 #'
 #'@description Creates a html map using leaflet to show NOAA data (see \code{\link{eq_clean_data}} for more details)
@@ -295,7 +299,7 @@ eq_map <- function(data, annot_col = NULL){
 
 }
 
-
+#'eq_create_label
 #'@name eq_create_label
 #'
 #'@description Creates a html string for a more representative label.
