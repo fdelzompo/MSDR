@@ -28,7 +28,7 @@ testthat::test_that("geom_timeline_label returns ggplot object", {
               filter(COUNTRY %in% c("USA", "CHINA")) %>%
               ggplot(aes(x = DATE, y = COUNTRY, alpha = TOTAL_DEATHS, size = EQ_PRIMARY))+
               geom_timeline()+
-              geom_timeline_lable(aes(label = LOCATION_NAME),n_max = 3),
+              geom_timeline_label(aes(label = LOCATION_NAME),n_max = 3),
             "ggplot")
 })
 
