@@ -15,19 +15,19 @@ There are two kind of visualization:
   + `eq_create_label()` - generates a more informative labels to be used in the leafletmap
 
 ## Examples
-Assuming you saved the data with name "earthquakes.tsv.gz"
+Assuming you saved the data with name "earthquakes.tsv.gz"  
 `data <- readr::read_delim("earthquakes.tsv.gz", delim = "\t")`
   
-Cleaning and ggplot visualization
-`data%>%filter(COUNTRY %in% c("USA", "CHINA")) %>%`
-  `eq_clean_data()%>%`
-  `ggplot(aes(x = DATE, y = COUNTRY, alpha = TOTAL_DEATHS, size = EQ_PRIMARY))+`
-  `geom_timeline()+`
-  `geom_timeline_lable(aes(label = LOCATION_NAME),n_max = 3)`
+Cleaning and ggplot visualization  
+`data%>%filter(COUNTRY %in% c("USA", "CHINA")) %>%`  
+  `eq_clean_data()%>%`  
+  `ggplot(aes(x = DATE, y = COUNTRY, alpha = TOTAL_DEATHS, size = EQ_PRIMARY))+`  
+  `geom_timeline()+`  
+  `geom_timeline_lable(aes(label = LOCATION_NAME),n_max = 3)`  
 
-Cleaning, label creation and leaflet visualization
-`data%>%filter(COUNTRY %in% c("USA", "CHINA")) %>%`
-  `eq_clean_data()%>%`
-  `dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(DATE) >= 2000) %>%`
-  `dplyr::mutate(popup_text = eq_create_label(.)) %>%`
-  `eq_map(annot_col = "popup_text")`
+Cleaning, label creation and leaflet visualization  
+`data%>%filter(COUNTRY %in% c("USA", "CHINA")) %>%`  
+  `eq_clean_data()%>%`  
+  `dplyr::filter(COUNTRY == "MEXICO" & lubridate::year(DATE) >= 2000) %>%`  
+  `dplyr::mutate(popup_text = eq_create_label(.)) %>%`  
+  `eq_map(annot_col = "popup_text")`  
