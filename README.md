@@ -5,6 +5,11 @@ This package allows the cleaning up and visualization of [NOAA Significant Earth
 ## Reading and cleaning data
 Once you read the data (note it's a tab separated file) you can use `eq_clean_data()` to convert the data in a more usable format
 
+*example* `data <- readr::read_delim("earthquakes.tsv.gz", delim = "\t")`
+          `clean_data <- eq_clean_data(data)`
+
+
+
 ## Visualizations
 There are two kind of visualization:
 * ggplot2 based:
