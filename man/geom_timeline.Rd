@@ -38,10 +38,6 @@ the default plot specification, e.g. \code{\link{borders}}.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
-
-\item{xmaxdate}{date or charachter formatted in year, month, day order}
-
-\item{xmindate}{date or charachter formatted in year, month, day order}
 }
 \description{
 Creates a timeline chart specific for a NOAA dataframe (see \code{\link{eq_clean_data}} for more details)

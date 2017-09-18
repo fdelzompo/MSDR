@@ -82,8 +82,6 @@ eq_location_clean <- function(data){
 #'is a factor indicating some stratification in which case multiple time lines will be plotted for each level of the factor (e.g. country).
 #'
 #'@param data a dataframe containing NOAA details
-#'@param xmaxdate date or charachter formatted in year, month, day order
-#'@param xmindate date or charachter formatted in year, month, day order
 #'
 #'@inheritParams ggplot2::geom_point
 #'
@@ -120,6 +118,9 @@ geom_timeline <- function(
 #'@importFrom grid gpar pointsGrob polylineGrob gList gTree
 #'@importFrom lubridate as_date
 #'@importFrom dplyr filter %>%
+#'
+#'@param xmaxdate date or charachter formatted in year, month, day order
+#'@param xmindate date or charachter formatted in year, month, day order
 geomtimeline <- ggplot2::ggproto("Geomtimeline", ggplot2::Geom,
                                  required_aes = c("x"),
                                  default_aes = ggplot2::aes(y =.2, shape = 19, alpha = 0.3, fill = "blue", color = "blue", size = 0.5, stroke = 0.5,
@@ -177,7 +178,6 @@ geomtimeline <- ggplot2::ggproto("Geomtimeline", ggplot2::Geom,
 #'
 #'
 #'@param data a dataframe containing NOAA details
-#'@param n_max numeric, it requires a value defined for the aestetic size, if omitted is by default = 5
 #'
 #'@inheritParams ggplot2::geom_text
 #'
@@ -215,16 +215,18 @@ geom_timeline_label <- function(
 #'
 #'@description Creates the grob for \code{\link{geom_timeline_label}}
 #'
-#'@importFrom ggplot2 ggproto aes draw_key_polygon
+#'@importFrom ggplot2 ggproto aes draw_key_blank
 #'@importFrom grid gpar pointsGrob polylineGrob gList gTree
 #'@importFrom lubridate as_date
 #'@importFrom dplyr filter %>%
+#'
+#'@param n_max numeric, it requires a value defined for the aestetic size, if omitted is by default = 5
 geomtimeline_label <- ggplot2::ggproto("Geomtimeline_label", ggplot2::Geom,
                                  required_aes = c("x","label"),
                                  default_aes = ggplot2::aes(y =.2, shape = 19, alpha = 0.3, fill = "blue", color = "blue", size = 0.5,
                                                             n_max = NA,
                                                             xmindate = NULL, xmaxdate = NULL),
-                                 draw_key = draw_key_blank,
+                                 draw_key = ggplot2::draw_key_blank,
 
                                  setup_data = function(self, data, params){
 

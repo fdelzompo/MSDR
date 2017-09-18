@@ -1,0 +1,8 @@
+require(MSDR)
+require(testthat)
+require(readr)
+require(dplyr)
+require(lubridate)
+require(ggplot2)
+require(leaflet)
+test_check("MSDR")

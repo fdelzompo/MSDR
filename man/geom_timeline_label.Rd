@@ -38,8 +38,6 @@ the default plot specification, e.g. \code{\link{borders}}.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{color = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
-
-\item{n_max}{numeric, it requires a value defined for the aestetic size, if omitted is by default = 5}
 }
 \description{
 Creates additional notation for the timeline chart (see \code{\link{geom_timeline}} for more details)
