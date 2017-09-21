@@ -8,11 +8,6 @@
 \usage{
 geomtimeline
 }
-\arguments{
-\item{xmaxdate}{date or charachter formatted in year, month, day order}
-
-\item{xmindate}{date or charachter formatted in year, month, day order}
-}
 \description{
 Creates the grob for \code{\link{geom_timeline}}
 }

@@ -8,9 +8,6 @@
 \usage{
 geomtimeline_label
 }
-\arguments{
-\item{n_max}{numeric, it requires a value defined for the aestetic size, if omitted is by default = 5}
-}
 \description{
 Creates the grob for \code{\link{geom_timeline_label}}
 }

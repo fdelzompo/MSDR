@@ -119,8 +119,6 @@ geom_timeline <- function(
 #'@importFrom lubridate as_date
 #'@importFrom dplyr filter %>%
 #'
-#'@param xmaxdate date or charachter formatted in year, month, day order
-#'@param xmindate date or charachter formatted in year, month, day order
 geomtimeline <- ggplot2::ggproto("Geomtimeline", ggplot2::Geom,
                                  required_aes = c("x"),
                                  default_aes = ggplot2::aes(y =.2, shape = 19, alpha = 0.3, fill = "blue", color = "blue", size = 0.5, stroke = 0.5,
@@ -220,7 +218,6 @@ geom_timeline_label <- function(
 #'@importFrom lubridate as_date
 #'@importFrom dplyr filter %>%
 #'
-#'@param n_max numeric, it requires a value defined for the aestetic size, if omitted is by default = 5
 geomtimeline_label <- ggplot2::ggproto("Geomtimeline_label", ggplot2::Geom,
                                  required_aes = c("x","label"),
                                  default_aes = ggplot2::aes(y =.2, shape = 19, alpha = 0.3, fill = "blue", color = "blue", size = 0.5,
