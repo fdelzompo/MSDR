@@ -13,7 +13,7 @@
 #'
 #'@return data A data frame with cleaned columns
 #'
-#'@importFrom dplyr mutate %>%
+#'@importFrom dplyr %>% if_else
 #'
 #'@examples
 #' \dontrun{
@@ -23,19 +23,18 @@
 #'
 #'@export
 eq_clean_data <- function(data){
-  data <- data %>%
-    dplyr::mutate(
-      EQ_PRIMARY =  as.numeric(EQ_PRIMARY),
-      LATITUDE =  as.numeric(LATITUDE),
-      LONGITUDE= as.numeric(LONGITUDE),
-      TOTAL_DEATHS = as.numeric(TOTAL_DEATHS),
-      YEAR = as.numeric(YEAR),
-      MONTH = ifelse(is.na(MONTH) == TRUE, 01,MONTH),
-      DAY = ifelse(is.na(DAY) == TRUE, 01,DAY),
-      DATE = if_else(data$YEAR > 0,
-                     as.Date(ISOdate(abs(YEAR),MONTH,DAY)),
-                     as.Date(as.numeric(ISOdate(0,1,1)-ISOdate(abs(YEAR),MONTH,DAY)), origin = '0000-01-01'))
-    )
+
+    data$EQ_PRIMARY =  as.numeric(data$EQ_PRIMARY)
+    data$LATITUDE =  as.numeric(data$LATITUDE)
+    data$LONGITUDE= as.numeric(data$LONGITUDE)
+    data$TOTAL_DEATHS = as.numeric(data$TOTAL_DEATHS)
+    data$YEAR = as.numeric(data$YEAR)
+    data$MONTH = ifelse(is.na(data$MONTH) == TRUE, 01,data$MONTH)
+    data$DAY = ifelse(is.na(data$DAY) == TRUE, 01,data$DAY)
+    data$DATE = dplyr::if_else(data$YEAR > 0,
+                     as.Date(ISOdate(abs(data$YEAR),data$MONTH,data$DAY)),
+                     as.Date(as.numeric(ISOdate(0,1,1)-ISOdate(abs(data$YEAR),data$MONTH,data$DAY)), origin = '0000-01-01'))
+
 
   data <- eq_location_clean(data)
 
