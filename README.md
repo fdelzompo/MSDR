@@ -1,5 +1,7 @@
 # NOAA earthquake tools
 
+[![Travis-CI Build Status](https://travis-ci.org/fdelzompo/MSDR.svg?branch=master)]([https://travis-ci.org/fdelzompo/MSDR])
+
 This package allows the cleaning up and visualization of [NOAA Significant Earthquake Database](https://www.ngdc.noaa.gov/nndc/struts/form?t=101650&s=1&d=1). NOAA stands for U.S. National Oceanographic and Atmospheric Administration. The whole dataset (downloadable from the previous link) contains more than 5,900 earthquackes worldwide. The goal of this package is to make the information more readable and visualizable.
 
 ## Reading and cleaning data
